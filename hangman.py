@@ -1,43 +1,33 @@
 import random
 
-# List of words
-words = ["apple", "banana", "grape", "orange", "mango"]
-word = random.choice(words)
-
+words = ["apple", "banana", "cherry", "grapes", "orange"]
+secret_word = random.choice(words)
 guessed_letters = []
-tries = 6
+attempts = 6
 
-print("🎮 Welcome to Hangman!")
-print("_ " * len(word))
+print("Welcome to Hangman!\n")
 
-while tries > 0:
-    guess = input("Enter a letter: ").lower()
-
-    if guess in guessed_letters:
-        print("You already guessed that letter.")
-        continue
-
-    guessed_letters.append(guess)
-
-    if guess in word:
-        print("✅ Good guess!")
-    else:
-        tries -= 1
-        print(f"❌ Wrong! Tries left: {tries}")
-
-    # Display word progress
-    display_word = ""
-    for letter in word:
-        if letter in guessed_letters:
-            display_word += letter + " "
-        else:
-            display_word += "_ "
-    print(display_word)
-
-    # Check win condition
+while attempts > 0:
+    display_word = "".join([letter if letter in guessed_letters else "_" for letter in secret_word])
+    print(f"Word: {display_word}")
+    
     if "_" not in display_word:
-        print("🎉 Congratulations! You guessed the word.")
+        print(" Congratulations! You guessed the word.")
         break
 
-if tries == 0:
-    print(f"💀 Game Over! The word was: {word}")
+    guess = input("Guess a letter: ").lower()
+    
+    if guess in guessed_letters:
+        print("You already guessed that letter.")
+    elif guess in secret_word:
+        print("Good guess!")
+        guessed_letters.append(guess)
+    else:
+        print("Wrong guess.")
+        attempts -= 1
+        guessed_letters.append(guess)
+
+    print(f"Attempts left: {attempts}\n")
+
+if "_" in display_word:
+    print(f"Game over! The word was: {secret_word}")
